@@ -104,7 +104,7 @@ func (c *XAIClient) CollectFullText(body io.Reader) (string, error) {
 func BuildXAIRequest(req *models.OpenAIRequest) *models.XAIRequest {
 	xaiInput := models.XAIInput{Role: "user", Content: []models.XAIContent{}}
 	for _, msg := range req.Messages {
-		xaiInput.Content = append(xaiInput.Content, models.XAIContent{Type: "input_text", Text: msg.Content})
+		xaiInput.Content = append(xaiInput.Content, models.XAIContent{Type: "input_text", Text: msg.Content.String()})
 	}
 
 	temp := 0.7

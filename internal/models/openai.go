@@ -1,5 +1,11 @@
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
+
 type OpenAIRequest struct {
 	Model            string          `json:"model"`
 	Messages         []OpenAIMessage `json:"messages"`
@@ -13,9 +19,44 @@ type OpenAIRequest struct {
 	FrequencyPenalty *float64        `json:"frequency_penalty,omitempty"`
 }
 
+type ContentPart struct {
+	Type string `json:"type"`
+	Text string `json:"text,omitempty"`
+}
+
+type MessageContent struct {
+	Text  string
+	Parts []ContentPart
+}
+
+func (m *MessageContent) UnmarshalJSON(data []byte) error {
+	var s string
+	if err := json.Unmarshal(data, &s); err == nil {
+		m.Text = s
+		return nil
+	}
+	var p []ContentPart
+	if err := json.Unmarshal(data, &p); err == nil {
+		m.Parts = p
+		return nil
+	}
+	return fmt.Errorf("invalid content")
+}
+
+func (m MessageContent) String() string {
+	if m.Text != "" {
+		return m.Text
+	}
+	var b strings.Builder
+	for _, p := range m.Parts {
+		b.WriteString(p.Text)
+	}
+	return b.String()
+}
+
 type OpenAIMessage struct {
-	Role    string `json:"role"`
-	Content string `json:"content"`
+	Role    string         `json:"role"`
+	Content MessageContent `json:"content"`
 }
 
 type OpenAIError struct {

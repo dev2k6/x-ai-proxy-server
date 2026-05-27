@@ -16,19 +16,24 @@ OpenAI-compatible proxy server for xAI Grok API with HTTP/2. Converts OpenAI API
 
 ```
 x-ai-proxy-server/
+├── bin/
+│   ├── proxy-windows-amd64.exe
+│   ├── proxy-linux-amd64
+│   ├── proxy-darwin-amd64
+│   └── proxy-darwin-arm64
 ├── cmd/
 │   └── proxy/
-│       └── main.go              # Entry point, header configuration
+│       └── main.go
 ├── internal/
 │   ├── client/
-│   │   └── xai.go               # XAIClient: SendRequest, ParseSSEStream, CollectFullText
+│   │   └── xai.go
 │   ├── handlers/
-│   │   └── chat.go              # ChatHandler: HandleChatCompletions, HandleModels, streamResponse, collectAndRespond
+│   │   └── chat.go
 │   └── models/
-│       ├── openai.go            # OpenAIRequest, OpenAIResponse, OpenAIChunk, OpenAIError
-│       └── xai.go               # XAIRequest, XAIInput, XAIContent, XAIEvent
+│       ├── openai.go
+│       └── xai.go
+├── config.json.example
 ├── go.mod
-├── proxy.exe                    # Built binary (Windows)
 └── README.md
 ```
 
@@ -39,31 +44,31 @@ x-ai-proxy-server/
 
 ## Build
 
-```bash
-go build -o proxy.exe ./cmd/proxy
-```
+Pre-built binaries are in `bin/`:
 
-Output: `proxy.exe` (≈9MB)
+- `proxy-windows-amd64.exe`
+- `proxy-linux-amd64`
+- `proxy-darwin-amd64`
+- `proxy-darwin-arm64`
+
+To rebuild:
+
+```bash
+go build -o bin/proxy ./cmd/proxy
+```
 
 ## Configuration
 
-### Port & Host (Environment Variables)
-
-No code changes needed:
-
-```bash
-PORT=9000 ./proxy.exe
-HOST=0.0.0.0 PORT=60443 ./proxy.exe
-```
-
-### Headers
-
-All headers (including Cookie) live in `config.json`. Copy the Cookie header value from browser devtools when Cloudflare tokens expire.
+All settings (host, port, api_key, headers) are in `config.json`. Copy `config.json.example` and edit. Headers (including Cookie) must be updated when Cloudflare tokens expire.
 
 ## Run
 
 ```bash
-./proxy.exe
+# Windows
+bin\proxy-windows-amd64.exe
+
+# Linux / macOS
+./bin/proxy-linux-amd64
 ```
 
 Copy `config.json.example` → `config.json`, edit, then run. `config.json` is gitignored.
