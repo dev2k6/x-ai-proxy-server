@@ -120,7 +120,7 @@ func BuildXAIRequest(req *models.OpenAIRequest) *models.XAIRequest {
 		maxTokens = *req.MaxTokens
 	}
 
-	return &models.XAIRequest{
+	xaiReq := &models.XAIRequest{
 		Model:           req.Model,
 		Input:           []models.XAIInput{xaiInput},
 		MaxOutputTokens: maxTokens,
@@ -128,12 +128,25 @@ func BuildXAIRequest(req *models.OpenAIRequest) *models.XAIRequest {
 		TopP:            topP,
 		Reasoning:       models.XAIReasoning{Effort: "low"},
 		Store:           false,
-		Include:         []string{"reasoning.encrypted_content"},
-		Tools: []models.XAITool{
+		Include:        []string{"reasoning.encrypted_content"},
+			ResponseFormat: req.ResponseFormat,
+		Stream:          true,
+	}
+
+	if req.Tools != nil {
+		xaiReq.Tools = req.Tools
+		if req.ToolChoice != nil {
+			xaiReq.ToolChoice = req.ToolChoice
+		} else {
+			xaiReq.ToolChoice = "auto"
+		}
+	} else {
+		xaiReq.Tools = []models.XAITool{
 			{Type: "web_search", EnableImageUnderstanding: true},
 			{Type: "x_search", EnableVideoUnderstanding: true},
-		},
-		ToolChoice: "auto",
-		Stream:     true,
+		}
+		xaiReq.ToolChoice = "auto"
 	}
+
+	return xaiReq
 }

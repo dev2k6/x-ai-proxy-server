@@ -9,8 +9,9 @@ type XAIRequest struct {
 	Reasoning       XAIReasoning `json:"reasoning"`
 	Store           bool         `json:"store"`
 	Include         []string     `json:"include"`
-	Tools           []XAITool    `json:"tools"`
-	ToolChoice      string       `json:"tool_choice"`
+	Tools           interface{}  `json:"tools,omitempty"`
+	ToolChoice      interface{}  `json:"tool_choice,omitempty"`
+	ResponseFormat  interface{}  `json:"response_format,omitempty"`
 	Stream          bool         `json:"stream"`
 }
 

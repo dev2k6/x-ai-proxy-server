@@ -17,11 +17,20 @@ type OpenAIRequest struct {
 	N                *int            `json:"n,omitempty"`
 	PresencePenalty  *float64        `json:"presence_penalty,omitempty"`
 	FrequencyPenalty *float64        `json:"frequency_penalty,omitempty"`
+	Tools            interface{}     `json:"tools,omitempty"`
+	ToolChoice       interface{}     `json:"tool_choice,omitempty"`
+	ResponseFormat   interface{}     `json:"response_format,omitempty"`
+}
+
+type ImageURL struct {
+	URL    string `json:"url"`
+	Detail string `json:"detail,omitempty"`
 }
 
 type ContentPart struct {
-	Type string `json:"type"`
-	Text string `json:"text,omitempty"`
+	Type     string     `json:"type"`
+	Text     string     `json:"text,omitempty"`
+	ImageURL *ImageURL  `json:"image_url,omitempty"`
 }
 
 type MessageContent struct {
@@ -49,14 +58,32 @@ func (m MessageContent) String() string {
 	}
 	var b strings.Builder
 	for _, p := range m.Parts {
-		b.WriteString(p.Text)
+		if p.Text != "" {
+			b.WriteString(p.Text)
+		}
+		if p.ImageURL != nil && p.ImageURL.URL != "" {
+			b.WriteString("[image: " + p.ImageURL.URL + "]")
+		}
 	}
 	return b.String()
 }
 
+type FunctionCall struct {
+	Name      string `json:"name"`
+	Arguments string `json:"arguments"`
+}
+
+type ToolCall struct {
+	ID       string        `json:"id"`
+	Type     string        `json:"type"`
+	Function FunctionCall  `json:"function"`
+}
+
 type OpenAIMessage struct {
-	Role    string         `json:"role"`
-	Content MessageContent `json:"content"`
+	Role       string         `json:"role"`
+	Content    MessageContent `json:"content"`
+	ToolCalls  []ToolCall     `json:"tool_calls,omitempty"`
+	ToolCallID string         `json:"tool_call_id,omitempty"`
 }
 
 type OpenAIError struct {
