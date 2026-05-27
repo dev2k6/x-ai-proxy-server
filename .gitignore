@@ -1,0 +1,5 @@
+config.json
+proxy
+proxy.exe
+*.log
+*.tmp

@@ -1,0 +1,28 @@
+{
+  "host": "localhost",
+  "port": "60443",
+  "api_key": "sk-optional-key-here",
+  "headers": {
+    "accept": "*/*",
+    "accept-language": "vi;q=0.7",
+    "authorization": "Bearer anonymous",
+    "baggage": "sentry-environment=production,...",
+    "cache-control": "no-cache",
+    "content-type": "application/json",
+    "origin": "https://console.x.ai",
+    "pragma": "no-cache",
+    "priority": "u=1, i",
+    "referer": "https://console.x.ai/team/<TEAM_ID>/chat-playground",
+    "sec-ch-ua": "\"Chromium\";v=\"148\", \"Brave\";v=\"148\", \"Not/A)Brand\";v=\"99\"",
+    "sec-ch-ua-mobile": "?1",
+    "sec-ch-ua-platform": "\"Android\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "same-origin",
+    "sec-gpc": "1",
+    "sentry-trace": "...",
+    "user-agent": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Mobile Safari/537.36",
+    "x-cluster": "https://us-east-1.api.x.ai",
+    "Cookie": "xai_anon_id=...; __cuid=...; cf_clearance=...; __cf_bm=...; sso=...; ..."
+  }
+}
